@@ -24,7 +24,7 @@ public class KMeans {
         this.samples = samples;
         dataset = data;
         init();
-        start(1,100);
+        start(10,100);
     }
     private void init()
     {

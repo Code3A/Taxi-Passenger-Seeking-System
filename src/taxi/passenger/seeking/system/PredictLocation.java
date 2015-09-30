@@ -57,10 +57,10 @@ public class PredictLocation {
         node[] result = null;
         for(int i = 1;i<maxClusters;i++)
         {
-            KMeans classifier = new KMeans(window,7,samples);
+            KMeans classifier = new KMeans(window,i,samples);
             double cost = classifier.cost();
             
-            //System.out.println(cost);
+            System.out.println(cost);
             if(cost<minimum)
             {
                 minimum = cost;
