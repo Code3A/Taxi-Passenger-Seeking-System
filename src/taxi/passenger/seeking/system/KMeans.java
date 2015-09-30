@@ -17,14 +17,14 @@ public class KMeans {
     node[] clusterCentroid,dataset;
     Integer[] clusterDensity,clusterNumber; 
 
-    KMeans(node data[],int clusters)
+    KMeans(node data[],int clusters,int samples)
     {
         this.clusters = clusters;
         this.features = 3;
-        this.samples = MAX_DATASET_SIZE;
+        this.samples = samples;
         dataset = data;
         init();
-        start(20,100);
+        start(1,100);
     }
     private void init()
     {
@@ -45,7 +45,8 @@ public class KMeans {
     private void assignClusters()
     {
         for(int i = 0;i<clusters;i++)
-            clusterDensity[i] = 0;
+            clusterDensity[i] = 1;
+        
         for(int i = 0;i<samples;i++)
         {
             double minimum = node.distance(dataset[i], clusterCentroid[0]);
@@ -65,13 +66,13 @@ public class KMeans {
         }
     }
     
-    private double cost()
+    public double cost()
     {
         double c = 0.0;
         for(int i = 0;i<samples;i++)
         {
-           double temp = node.distance(clusterCentroid[clusterNumber[i]],dataset[i])/10000;
-           double v = (temp*temp);
+           double temp = node.distance(clusterCentroid[clusterNumber[i]],dataset[i]);
+           double v = (temp*temp)/1000000;
            c += v;
         }
         return c;
@@ -81,8 +82,10 @@ public class KMeans {
     {
         //Evaluate Mean
         node[] mean = new node[clusters];
+        
         for(int i = 0;i<clusters;i++)
             mean[i] = new node(0,0,0);
+        
         for(int i = 0;i<samples;i++)
         {
             int k = clusterNumber[i];
@@ -101,7 +104,7 @@ public class KMeans {
     {
          node[] result = new node[clusters];
          
-         double minimumCost = 1e12; //INF
+         double minimumCost = 1e240; //INF
          
          for(int i = 0;i<outerIterations;i++)
          {
@@ -113,21 +116,26 @@ public class KMeans {
                  moveClusters();
                  assignClusters();
                  
+                 //for(int z = 0;z<clusters;z++)
+                   //  System.out.println(clusterCentroid[i]);
+         
+                double effectiveCost = cost();
+                //System.out.println(effectiveCost);
              }
-             for(int j = 0;j<clusters;j++)
-                 result[j] = new node(clusterCentroid[j]);
-             
-             double effectiveCost = cost();
-             System.out.println(effectiveCost);
-             
-             if(minimumCost<effectiveCost)
+             double temp = cost();
+             if(minimumCost>temp)
              {
-                 minimumCost = effectiveCost;
-                 result = clusterCentroid;
-             }
+                  minimumCost = temp;
+                  result = clusterCentroid;
+            }
          }
          clusterCentroid = result;
+         
     }  
-
+    
+    node[] clusterCentroids()
+    {
+        return clusterCentroid;
+    }
     
 }

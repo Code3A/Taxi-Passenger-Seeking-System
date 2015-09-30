@@ -20,7 +20,8 @@ public class TaxiPassengerSeekingSystem {
      */
       public static void main(String args[]) throws IOException
     {
-     
+        
+        //loading dataset
         Scanner scan = new Scanner(new File("Data.txt"));
         node[] data = new node[20000];
         
@@ -28,12 +29,21 @@ public class TaxiPassengerSeekingSystem {
         while(scan.hasNext())
         {
             String gData = scan.nextLine();
-           // System.out.println(gData);
             data[k++] = new node(gData);
         }
         scan.close();
         
-        KMeans cluster = new KMeans(data,5);
+       //data loaded
+        
+        PredictLocation predictor = new PredictLocation(757866,421176,0,1000,data);
+        node[] result = predictor.getClusters();
+        int cnt = predictor.getClusterCount();
+        
+       //KMeans c = new KMeans(data,5,KMeans.MAX_DATASET_SIZE);
+        
+        System.out.println(cnt);
+        for(int i = 0;i<cnt;i++)
+            System.out.println(result[i]);
         
     }
 }
